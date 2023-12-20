@@ -26,7 +26,29 @@ app.get('/', async (req, res) => {
   logger.info({logField: 'custom-entry', arbitraryField: 'custom-entry'}); // Example of structured logging
   // Use request-based logger with log correlation
   req.log.info('Child logger with trace Id.'); // https://cloud.google.com/run/docs/logging#correlate-logs
-  res.send('Hello World!');
+  res.send(`
+    <html>
+      <body>
+        <form action="/" method="post">
+          <label for="feedback">Geben Sie Ihr Feedback ein:</label><br>
+          <input type="text" id="feedback" name="feedback"><br><br>
+          <input type="submit" value="Submit">
+        </form>
+      </body>
+    </html>
+  `);
+});
+
+app.post('/', async (req, res) => {
+  const feedback = req.body.feedback;
+  logger.info({feedback: feedback}); // Example of structured logging
+  res.send(`
+    <html>
+      <body>
+        <p>Ihr Feedback wurde gespeichert: ${feedback}</p>
+      </body>
+    </html>
+  `);
 });
 
 export default app;
